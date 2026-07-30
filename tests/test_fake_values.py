@@ -86,6 +86,10 @@ def test_credentials_read_from_the_environment_are_clean(scan_code):
 
 
 def test_realistic_looking_key_is_not_flagged(scan_code):
+    # The literal below must stay generic. A value shaped like a real provider
+    # key - `sk_live_...`, `AKIA...`, `ghp_...` - trips GitHub's push
+    # protection and blocks the commit, even inside a test asserting we do
+    # *not* flag it. Any opaque high-entropy string proves the same point.
     source = """
     API_KEY = "a3f9c1e84b7d26059fe1c8b34a7d92e6"
     password = "correct-horse-battery-staple"
