@@ -1,0 +1,35 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Install
+        run: pip install -e ".[dev]"
+
+      - name: Test
+        run: python -m pytest tests/ -q
+
+      # vibelint must stay clean on its own source. If a new rule starts
+      # firing here, either the rule is wrong or this codebase is.
+      - name: Lint itself
+        run: vibelint src/ --fail-on note
+
+      - name: Detect the demo project
+        run: vibelint examples/vibe_coded_app --fail-on critical || test $? -eq 1
