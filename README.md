@@ -5,7 +5,8 @@
 Your ai assistant writes code that imports cleanly, reads well, and looks finished. Some of it does nothing. `vibelint` runs over a Python project like a test suite and reports every place the model invented an API, left a function unwritten, swallowed an error, or produced a test that cannot fail.
 
 <p align="center">
-  <img src="demo.svg" alt="vibelint finding 25 problems in an AI-written project" width="900">
+  <img src="https://raw.githubusercontent.com/braindesmond5-boop/vibelint/main/demo.svg"
+       alt="vibelint finding 25 problems in an AI-written project" width="900">
 </p>
 
 In full (not `--quiet`) it shows the offending line and what to do about it:

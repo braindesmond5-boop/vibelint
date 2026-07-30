@@ -34,6 +34,11 @@ classifiers = [
 ]
 dependencies = []
 
+[project.urls]
+Homepage = "https://github.com/braindesmond5-boop/vibelint"
+Repository = "https://github.com/braindesmond5-boop/vibelint"
+Issues = "https://github.com/braindesmond5-boop/vibelint/issues"
+
 [project.scripts]
 vibelint = "vibelint.cli:main"
 
