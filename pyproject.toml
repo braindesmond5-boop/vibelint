@@ -9,6 +9,7 @@ description = "Find the mistakes AI leaves behind in your code. Like tests, but 
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
+authors = [{ name = "Desmond Akordor Brain Acquah" }]
 keywords = [
     "ai",
     "linter",
