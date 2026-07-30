@@ -26,11 +26,12 @@ jobs:
       - name: Test
         run: python -m pytest tests/ -q
 
-      # vibelint must stay clean on its own source. If a new rule starts
-      # firing here, either the rule is wrong or this codebase is.
+      # PATH is unreliable across platforms, so this form has to keep working.
       - name: Module entry point works
         run: python -m vibelint --version
 
+      # vibelint must stay clean on its own source. If a new rule starts
+      # firing here, either the rule is wrong or this codebase is.
       - name: Lint itself
         run: vibelint src/ --fail-on note
 
