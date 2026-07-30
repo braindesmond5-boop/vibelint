@@ -18,6 +18,7 @@ from vibelint.checks._ast_utils import (
     enclosing_function,
     imported_project_modules,
     parent_of,
+    walk_own_scope,
 )
 from vibelint.checks.base import Check
 from vibelint.context import FileContext
@@ -108,11 +109,11 @@ class BlockingInAsyncCheck(Check):
 
     def check(self, ctx: FileContext) -> Iterable[Finding]:
         for node in ctx.nodes(ast.AsyncFunctionDef):
-            for child in ast.walk(node):
+            # walk_own_scope stops at nested functions, so a plain sync helper
+            # defined inside a coroutine never has its calls blamed on the
+            # coroutine that encloses it.
+            for child in walk_own_scope(node):
                 if not isinstance(child, ast.Call):
-                    continue
-                # Do not attribute a nested sync function's calls to its parent.
-                if enclosing_function(child) is not node:
                     continue
 
                 path = dotted_path(child.func) if isinstance(child.func, ast.Attribute) else None

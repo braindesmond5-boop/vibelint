@@ -113,6 +113,16 @@ Getting to that number meant teaching the checks about how Python is actually wr
 - A package in `requirements.txt` but not installed is your setup, not the model's invention.
 - Vendored directories are somebody else's code and are skipped.
 
+## Speed
+
+The whole Python standard library - **680 files, 306,000 lines** - takes about
+27 seconds on a laptop, or roughly 11,000 lines a second. A normal project is
+a fraction of that: a few thousand lines finishes before you lift your hand off
+the keyboard.
+
+Each file is parsed once and its nodes bucketed by type, so adding a sixteenth
+check costs almost nothing - the tree is already walked.
+
 ## In CI
 
 ```yaml

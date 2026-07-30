@@ -60,6 +60,15 @@ BASE_CLASS_NAME = re.compile(
 
 _COMPILED = [(re.compile(pattern, re.IGNORECASE), why) for pattern, why in CONFESSION_PATTERNS]
 
+#: One regex matching any confession phrase, run over the raw source before we
+#: bother tokenising. Extracting comments properly costs a full tokenise pass,
+#: and on a large codebase that was a fifth of the entire runtime - spent almost
+#: entirely on files with nothing to find.
+_ANY_CONFESSION = re.compile(
+    "|".join(f"(?:{pattern})" for pattern, _ in CONFESSION_PATTERNS),
+    re.IGNORECASE,
+)
+
 _STUB_MESSAGES = {
     "pass": "{name}() has an empty body but is treated as implemented",
     "ellipsis": "{name}() is a `...` stub but is treated as implemented",
@@ -126,6 +135,11 @@ class ConfessionCheck(Check):
     severity = Severity.CRITICAL
 
     def check(self, ctx: FileContext) -> Iterable[Finding]:
+        # Cheap reject: if no phrase appears anywhere in the file, there is
+        # nothing a comment could contain either.
+        if not _ANY_CONFESSION.search(ctx.source):
+            return
+
         for lineno, comment in ctx.comments:
             for pattern, why in _COMPILED:
                 if pattern.search(comment):

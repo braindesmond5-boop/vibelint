@@ -186,6 +186,26 @@ def attribute_root(node: ast.Attribute) -> Optional[str]:
     return None
 
 
+#: Nodes that open a new scope, so their contents belong to them, not to us.
+SCOPE_BOUNDARIES = (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.Lambda)
+
+
+def walk_own_scope(node: ast.AST):
+    """Every descendant of `node` that is still in `node`'s own scope.
+
+    Stops at nested functions, classes and lambdas. Cheaper than `ast.walk`
+    followed by an `enclosing_function` test on every hit, and correct by
+    construction rather than by filtering afterwards.
+    """
+    stack = list(ast.iter_child_nodes(node))
+    while stack:
+        current = stack.pop()
+        yield current
+        if isinstance(current, SCOPE_BOUNDARIES):
+            continue
+        stack.extend(ast.iter_child_nodes(current))
+
+
 def imported_project_modules(ctx) -> dict:
     """Local alias -> the project module it refers to.
 
