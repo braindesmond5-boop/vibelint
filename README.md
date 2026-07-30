@@ -4,6 +4,12 @@
 
 Your ai assistant writes code that imports cleanly, reads well, and looks finished. Some of it does nothing. `vibelint` runs over a Python project like a test suite and reports every place the model invented an API, left a function unwritten, swallowed an error, or produced a test that cannot fail.
 
+<p align="center">
+  <img src="demo.svg" alt="vibelint finding 25 problems in an AI-written project" width="900">
+</p>
+
+In full (not `--quiet`) it shows the offending line and what to do about it:
+
 ```console
 $ vibelint examples/vibe_coded_app
 
@@ -139,6 +145,14 @@ git clone <repo> && cd vibelint
 pip install -e ".[dev]"
 python -m pytest tests/ -q
 vibelint examples/vibe_coded_app     # should report 25 flops
+```
+
+The README demo and the social card are both generated from the tool's real
+output, so they cannot drift from what it actually prints:
+
+```bash
+python3 tools/make_demo.py      # -> demo.svg
+python3 tools/make_social.py    # -> social-preview.png  (macOS)
 ```
 
 ## License
