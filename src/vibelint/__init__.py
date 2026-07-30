@@ -10,5 +10,5 @@ to catch AI's mistakes.
 
 from vibelint.finding import Finding, Severity
 
-__version__ = "0.1.1"
+__version__ = "0.3.0"
 __all__ = ["Finding", "Severity", "__version__"]
