@@ -28,6 +28,9 @@ jobs:
 
       # vibelint must stay clean on its own source. If a new rule starts
       # firing here, either the rule is wrong or this codebase is.
+      - name: Module entry point works
+        run: python -m vibelint --version
+
       - name: Lint itself
         run: vibelint src/ --fail-on note
 

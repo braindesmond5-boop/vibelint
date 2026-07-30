@@ -56,7 +56,36 @@ Nothing else catches these, because until recently nothing wrote them at scale:
 pip install vibelint
 ```
 
-Zero dependencies. Python 3.9+. It never runs, imports, or evaluates the code it analyses — everything is read from the syntax tree.
+Zero dependencies. Python 3.9+. Windows, macOS and Linux. It never runs, imports, or evaluates the code it analyses — everything is read from the syntax tree.
+
+<details>
+<summary>If <code>pip</code> or <code>vibelint</code> isn't found</summary>
+
+**macOS / Linux** — the system Python has no `pip` command, only the module,
+and installed scripts land somewhere not on `PATH`:
+
+```bash
+python3 -m pip install --user vibelint
+python3 -m vibelint .                     # always works
+```
+
+To type `vibelint` directly, add the script directory to your shell:
+
+```bash
+echo 'export PATH="$HOME/Library/Python/3.9/bin:$PATH"' >> ~/.zshrc   # macOS
+```
+
+**Windows** — use the launcher if `pip` isn't on `PATH`:
+
+```
+py -m pip install vibelint
+py -m vibelint .
+```
+
+`python -m vibelint` is equivalent to the `vibelint` command everywhere, so it
+is the reliable form when `PATH` is uncooperative.
+
+</details>
 
 ## Use
 

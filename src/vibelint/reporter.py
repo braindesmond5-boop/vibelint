@@ -33,12 +33,54 @@ SEVERITY_MARK = {
 }
 
 
+def _enable_windows_ansi() -> bool:
+    """Turn on ANSI escape handling in a Windows console.
+
+    Windows 10 and later can interpret escape codes, but only once a console
+    opts in. Without this the report prints literal noise like `<-[31m` around
+    every coloured word.
+    """
+    if os.name != "nt":
+        return True
+    try:
+        import ctypes
+
+        kernel32 = ctypes.windll.kernel32  # type: ignore[attr-defined]
+        handle = kernel32.GetStdHandle(-11)  # STD_OUTPUT_HANDLE
+        mode = ctypes.c_ulong()
+        if not kernel32.GetConsoleMode(handle, ctypes.byref(mode)):
+            return False
+        # ENABLE_VIRTUAL_TERMINAL_PROCESSING
+        return bool(kernel32.SetConsoleMode(handle, mode.value | 0x0004))
+    except Exception:
+        return False
+
+
 def supports_color(stream: TextIO) -> bool:
     if os.environ.get("NO_COLOR"):
         return False
     if os.environ.get("FORCE_COLOR"):
         return True
-    return hasattr(stream, "isatty") and stream.isatty()
+    if not (hasattr(stream, "isatty") and stream.isatty()):
+        return False
+    return _enable_windows_ansi()
+
+
+def supports_unicode(stream: TextIO) -> bool:
+    """Whether the box-drawing characters can actually be written.
+
+    Piping to a file on Windows uses the locale encoding, which cannot
+    represent the rule and bullet characters - and an encoding error while
+    printing a report would crash the run over decoration.
+    """
+    encoding = getattr(stream, "encoding", None)
+    if not encoding:
+        return False
+    try:
+        "─·…".encode(encoding)
+    except (UnicodeEncodeError, LookupError):
+        return False
+    return True
 
 
 class TextReporter:
@@ -48,6 +90,11 @@ class TextReporter:
         self.stream = stream or sys.stdout
         self.color = supports_color(self.stream) if color is None else color
         self.quiet = quiet
+
+        unicode_ok = supports_unicode(self.stream)
+        self.rule = "─" if unicode_ok else "-"
+        self.bullet = "·" if unicode_ok else "*"
+        self.ellipsis = "…" if unicode_ok else "..."
 
     # -- colour helpers --------------------------------------------------
 
@@ -115,7 +162,7 @@ class TextReporter:
             write(f"  {line_no}  {marker}  {label}  {finding.message}\n")
 
             if finding.snippet and not self.quiet:
-                snippet = _truncate(finding.snippet, 88)
+                snippet = _truncate(finding.snippet, 88, self.ellipsis)
                 write("         " + self._paint(f"|  {snippet}", DIM) + "\n")
 
             if finding.suggestion and not self.quiet:
@@ -153,14 +200,14 @@ class TextReporter:
             )
         )
 
-        write("  " + self._paint("─" * 60, DIM) + "\n")
-        write("  " + self._paint("  ·  ", DIM).join(parts) + "\n")
+        write("  " + self._paint(self.rule * 60, DIM) + "\n")
+        write("  " + self._paint(f"  {self.bullet}  ", DIM).join(parts) + "\n")
 
         footer = f"  checked in {result.duration:.2f}s"
         if result.suppressed:
-            footer += f"  ·  {result.suppressed} suppressed"
+            footer += f"  {self.bullet}  {result.suppressed} suppressed"
         if result.files_skipped:
-            footer += f"  ·  {result.files_skipped} unreadable"
+            footer += f"  {self.bullet}  {result.files_skipped} unreadable"
         write(self._paint(footer, DIM) + "\n\n")
 
 
@@ -221,5 +268,5 @@ def _plural(count: int, noun: str) -> str:
     return f"{count} {noun}" if count == 1 else f"{count} {noun}s"
 
 
-def _truncate(text: str, limit: int) -> str:
-    return text if len(text) <= limit else text[: limit - 1] + "…"
+def _truncate(text: str, limit: int, ellipsis: str = "...") -> str:
+    return text if len(text) <= limit else text[: limit - len(ellipsis)] + ellipsis
