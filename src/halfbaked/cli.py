@@ -7,11 +7,11 @@ import sys
 from pathlib import Path
 from typing import List, Optional, Sequence
 
-from vibelint import __version__
-from vibelint.checks import check_catalog, select_checks
-from vibelint.finding import Severity
-from vibelint.reporter import JsonReporter, TextReporter
-from vibelint.scanner import ScanResult, scan
+from halfbaked import __version__
+from halfbaked.checks import check_catalog, select_checks
+from halfbaked.finding import Severity
+from halfbaked.reporter import JsonReporter, TextReporter
+from halfbaked.scanner import ScanResult, scan
 
 EXIT_CLEAN = 0
 EXIT_FLOPS_FOUND = 1
@@ -35,23 +35,23 @@ wired into real code paths.
 
 EPILOG = """\
 examples:
-  vibelint                     check the current directory
-  vibelint src/                check one directory
-  vibelint app.py              check a single file
-  vibelint --only VC040        show only test-theater findings
-  vibelint --ignore VC021      hide a rule you disagree with
-  vibelint --json              machine-readable output for CI
-  vibelint --list              describe every check
+  halfbaked                     check the current directory
+  halfbaked src/                check one directory
+  halfbaked app.py              check a single file
+  halfbaked --only VC040        show only test-theater findings
+  halfbaked --ignore VC021      hide a rule you disagree with
+  halfbaked --json              machine-readable output for CI
+  halfbaked --list              describe every check
 
 Silence one line with a trailing comment:
-  result = risky()  # vibelint: ignore
+  result = risky()  # halfbaked: ignore
   result = risky()  # noqa: VC030
 """
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="vibelint",
+        prog="halfbaked",
         description=DESCRIPTION,
         epilog=EPILOG,
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -96,7 +96,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--list", action="store_true", help="list every check and what it catches"
     )
-    parser.add_argument("--version", action="version", version=f"vibelint {__version__}")
+    parser.add_argument("--version", action="version", version=f"halfbaked {__version__}")
 
     return parser
 
@@ -151,7 +151,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     if unknown:
         parser.error(
             f"unknown check code{'s' if len(unknown) > 1 else ''}: "
-            f"{', '.join(unknown)}. Run `vibelint --list` to see them all."
+            f"{', '.join(unknown)}. Run `halfbaked --list` to see them all."
         )
 
     checks = select_checks(enabled=args.only, disabled=args.ignore)

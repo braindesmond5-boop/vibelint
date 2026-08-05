@@ -16,17 +16,17 @@ import builtins
 import difflib
 from typing import Dict, Iterable, Optional, Set
 
-from vibelint.checks._ast_utils import (
+from halfbaked.checks._ast_utils import (
     annotate_parents,
     attribute_root,
     imported_project_modules,
 )
-from vibelint.checks.base import Check
-from vibelint.context import FileContext, ModuleInfo
-from vibelint.finding import Finding, Severity
+from halfbaked.checks.base import Check
+from halfbaked.context import FileContext, ModuleInfo
+from halfbaked.finding import Finding, Severity
 
 #: Builtins added after 3.9. `dir(builtins)` only describes the interpreter
-#: running vibelint, so linting a 3.11 codebase from 3.9 would otherwise report
+#: running halfbaked, so linting a 3.11 codebase from 3.9 would otherwise report
 #: `anext()` and `ExceptionGroup` as hallucinated - a confident falsehood.
 LATER_BUILTINS = {
     "aiter",  # 3.10

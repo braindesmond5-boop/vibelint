@@ -213,7 +213,7 @@ def _dependency_files(root: Path):
     ]
 
     # Look in the target directory and a couple of levels up, since people run
-    # vibelint on a subdirectory of a larger project.
+    # halfbaked on a subdirectory of a larger project.
     seen = set()
     for base in [root, *list(root.parents)[:2]]:
         for name in names:

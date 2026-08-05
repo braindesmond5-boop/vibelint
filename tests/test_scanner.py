@@ -1,8 +1,8 @@
 """File discovery, suppression comments, syntax errors and the ScanResult shape."""
 
-from vibelint.finding import Severity
-from vibelint.indexer import discover_python_files, dotted_name_for
-from vibelint.scanner import scan
+from halfbaked.finding import Severity
+from halfbaked.indexer import discover_python_files, dotted_name_for
+from halfbaked.scanner import scan
 
 from conftest import code_set, codes, describe, lines_for, write_project
 
@@ -134,12 +134,44 @@ def test_bare_noqa_suppresses_everything_on_the_line(scan_project):
     assert result.suppressed == 1
 
 
-def test_vibelint_ignore_suppresses_everything_on_the_line(scan_project):
+def test_halfbaked_ignore_suppresses_everything_on_the_line(scan_project):
+    source = """
+    def run():
+        try:
+            risky()
+        except:  # halfbaked: ignore
+            pass
+    """
+    result = scan_project(source, only=["VC030"])
+    assert result.findings == []
+    assert result.suppressed == 1
+
+
+def test_former_vibelint_comment_still_suppresses(scan_project):
+    """The tool was called vibelint before. Old suppressions must keep working.
+
+    Suppression comments live in other people's source files. Quietly ceasing
+    to honour one would resurrect a finding the author had already reviewed and
+    decided to accept, which is the worst way for a rename to reach a user.
+    """
     source = """
     def run():
         try:
             risky()
         except:  # vibelint: ignore
+            pass
+    """
+    result = scan_project(source, only=["VC030"])
+    assert result.findings == []
+    assert result.suppressed == 1
+
+
+def test_former_vibelint_comment_with_a_code_still_suppresses(scan_project):
+    source = """
+    def run():
+        try:
+            risky()
+        except:  # vibelint: VC030
             pass
     """
     result = scan_project(source, only=["VC030"])
@@ -160,12 +192,12 @@ def test_code_specific_noqa_suppresses_that_code(scan_project):
     assert result.suppressed == 1
 
 
-def test_code_specific_vibelint_comment_suppresses_that_code(scan_project):
+def test_code_specific_halfbaked_comment_suppresses_that_code(scan_project):
     source = """
     def run():
         try:
             risky()
-        except:  # vibelint: VC030
+        except:  # halfbaked: VC030
             pass
     """
     result = scan_project(source, only=["VC030"])

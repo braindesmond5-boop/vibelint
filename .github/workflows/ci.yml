@@ -28,12 +28,12 @@ jobs:
 
       # PATH is unreliable across platforms, so this form has to keep working.
       - name: Module entry point works
-        run: python -m vibelint --version
+        run: python -m halfbaked --version
 
-      # vibelint must stay clean on its own source. If a new rule starts
+      # halfbaked must stay clean on its own source. If a new rule starts
       # firing here, either the rule is wrong or this codebase is.
       - name: Lint itself
-        run: vibelint src/ --fail-on note
+        run: halfbaked src/ --fail-on note
 
       - name: Detect the demo project
-        run: vibelint examples/vibe_coded_app --fail-on critical || test $? -eq 1
+        run: halfbaked examples/vibe_coded_app --fail-on critical || test $? -eq 1

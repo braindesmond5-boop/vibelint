@@ -13,10 +13,10 @@ import ast
 import re
 from typing import Iterable, List, Optional, Tuple  # noqa: F401
 
-from vibelint.checks._ast_utils import call_name, dotted_path, parent_of
-from vibelint.checks.base import Check
-from vibelint.context import FileContext
-from vibelint.finding import Finding, Severity
+from halfbaked.checks._ast_utils import call_name, dotted_path, parent_of
+from halfbaked.checks.base import Check
+from halfbaked.context import FileContext
+from halfbaked.finding import Finding, Severity
 
 #: Names that indicate a value is meant to be a real credential or endpoint.
 SENSITIVE_NAME = re.compile(

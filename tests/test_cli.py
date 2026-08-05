@@ -5,8 +5,8 @@ import json
 
 import pytest
 
-from vibelint.checks import CHECK_CLASSES, check_catalog, select_checks
-from vibelint.cli import EXIT_CLEAN, EXIT_FLOPS_FOUND, EXIT_USAGE_ERROR, main, print_catalog
+from halfbaked.checks import CHECK_CLASSES, check_catalog, select_checks
+from halfbaked.cli import EXIT_CLEAN, EXIT_FLOPS_FOUND, EXIT_USAGE_ERROR, main, print_catalog
 
 from conftest import write_project
 

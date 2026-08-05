@@ -1,4 +1,4 @@
-"""Shared fixtures for the vibelint test suite.
+"""Shared fixtures for the halfbaked test suite.
 
 The whole suite is written in one shape: *given this source, expect these
 codes on these lines*. Everything here exists to make that shape short.
@@ -32,9 +32,9 @@ _SRC = _REPO_ROOT / "src"
 if str(_SRC) not in sys.path:
     sys.path.insert(0, str(_SRC))
 
-from vibelint.checks import select_checks  # noqa: E402
-from vibelint.finding import Finding, Severity  # noqa: E402
-from vibelint.scanner import ScanResult, scan  # noqa: E402
+from halfbaked.checks import select_checks  # noqa: E402
+from halfbaked.finding import Finding, Severity  # noqa: E402
+from halfbaked.scanner import ScanResult, scan  # noqa: E402
 
 Sources = Union[str, Dict[str, str]]
 

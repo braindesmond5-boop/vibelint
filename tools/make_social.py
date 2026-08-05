@@ -94,7 +94,7 @@ def draw_card() -> Content:
     c.rect(0, 0, WIDTH, HEIGHT, COLORS["bg"])
     c.rect(0, 0, WIDTH, 5, COLORS["red"])
 
-    c.text(80, 138, 68, COLORS["white"], "vibelint", bold=True)
+    c.text(80, 138, 68, COLORS["white"], "halfbaked", bold=True)
     c.text(80, 186, 21, COLORS["grey"], "Find the mistakes AI leaves behind in your code.")
 
     # Terminal panel
@@ -103,7 +103,7 @@ def draw_card() -> Content:
 
     for i, dot in enumerate(("red", "amber", "green")):
         c.circle(110 + i * 20, 260, 6, COLORS[dot])
-    c.text(172, 265, 13, COLORS["dim"], "vibelint .")
+    c.text(172, 265, 13, COLORS["dim"], "halfbaked .")
 
     findings = [
         ("x", "red", "GHOST FUNCTION", "sanitize_input() is not defined anywhere"),
@@ -136,7 +136,7 @@ def draw_card() -> Content:
     x = c.text(x + 22, 550, 19, COLORS["dim"], "\xb7")
     c.text(x + 22, 550, 19, COLORS["cyan"], "Python 3.9+")
 
-    c.text(80, 596, 16, COLORS["dim"], "pip install vibelint")
+    c.text(80, 596, 16, COLORS["dim"], "pip install halfbaked")
 
     return c
 

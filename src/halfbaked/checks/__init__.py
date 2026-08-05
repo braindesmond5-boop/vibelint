@@ -1,6 +1,6 @@
 """The check registry.
 
-Adding a rule to vibelint means writing a Check subclass and listing it here.
+Adding a rule to halfbaked means writing a Check subclass and listing it here.
 Nothing else in the codebase needs to know it exists.
 """
 
@@ -8,18 +8,18 @@ from __future__ import annotations
 
 from typing import Dict, List, Optional, Sequence
 
-from vibelint.checks.async_misuse import BlockingInAsyncCheck, LostAwaitCheck
-from vibelint.checks.base import Check, run_checks
-from vibelint.checks.fake_values import (
+from halfbaked.checks.async_misuse import BlockingInAsyncCheck, LostAwaitCheck
+from halfbaked.checks.base import Check, run_checks
+from halfbaked.checks.fake_values import (
     EnvFallbackCheck,
     FakeEndpointCheck,
     FakeSecretCheck,
 )
-from vibelint.checks.ghost_calls import GhostAttributeCheck, GhostCallCheck
-from vibelint.checks.ghost_imports import GhostImportCheck
-from vibelint.checks.placeholders import ConfessionCheck, PlaceholderCheck
-from vibelint.checks.silent_errors import EmptyFinallyCheck, SilentFailureCheck
-from vibelint.checks.test_theater import (
+from halfbaked.checks.ghost_calls import GhostAttributeCheck, GhostCallCheck
+from halfbaked.checks.ghost_imports import GhostImportCheck
+from halfbaked.checks.placeholders import ConfessionCheck, PlaceholderCheck
+from halfbaked.checks.silent_errors import EmptyFinallyCheck, SilentFailureCheck
+from halfbaked.checks.test_theater import (
     ConstantAssertionCheck,
     MockTautologyCheck,
     NoAssertionCheck,
@@ -72,7 +72,7 @@ def select_checks(
 
 
 def check_catalog() -> Dict[str, Check]:
-    """Code -> check, for `vibelint --list`."""
+    """Code -> check, for `halfbaked --list`."""
     return {check.code: check for check in all_checks()}
 
 

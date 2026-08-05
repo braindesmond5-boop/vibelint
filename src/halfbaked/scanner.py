@@ -8,19 +8,24 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import List, Optional, Sequence
 
-from vibelint.checks import Check, run_checks, select_checks
-from vibelint.context import FileContext
-from vibelint.finding import Finding, Severity
-from vibelint.indexer import (
+from halfbaked.checks import Check, run_checks, select_checks
+from halfbaked.context import FileContext
+from halfbaked.finding import Finding, Severity
+from halfbaked.indexer import (
     build_index,
     discover_project_root,
     discover_python_files,
     parse_file,
 )
 
-#: `# vibelint: ignore`, `# noqa`, `# noqa: VC010,VC020`
+#: `# halfbaked: ignore`, `# noqa`, `# noqa: VC010,VC020`
+#:
+#: `vibelint` is the tool's former name and stays accepted forever. Suppression
+#: comments live in other people's source files, and silently ceasing to honour
+#: one would reintroduce a finding they had already decided to accept - the
+#: worst possible way for a rename to reach a user.
 SUPPRESSION = re.compile(
-    r"#\s*(?:vibelint|noqa)\s*:?\s*(?P<codes>[A-Za-z0-9, ]*)",
+    r"#\s*(?:halfbaked|vibelint|noqa)\s*:?\s*(?P<codes>[A-Za-z0-9, ]*)",
     re.IGNORECASE,
 )
 
@@ -127,7 +132,7 @@ def _syntax_finding(path: Path, source: str, error: SyntaxError) -> Finding:
 
 
 def _is_suppressed(ctx: FileContext, finding: Finding) -> bool:
-    """Honour `# noqa` / `# vibelint: ignore` on the reported line."""
+    """Honour `# noqa` / `# halfbaked: ignore` on the reported line."""
     line = ctx.line_text(finding.line)
     if "#" not in line:
         return False
@@ -142,12 +147,12 @@ def _is_suppressed(ctx: FileContext, finding: Finding) -> bool:
         for code in codes.replace(" ", ",").split(",")
         if code.strip()
     }
-    # `# vibelint: ignore VC001` reads naturally and was documented, but the
+    # `# halfbaked: ignore VC001` reads naturally and was documented, but the
     # word "ignore" is not a code - drop it before matching, or the whole
     # suppression silently does nothing.
     listed -= {"IGNORE", "DISABLE", "SKIP", "SILENCE"}
 
-    # A bare `# noqa` or `# vibelint: ignore` suppresses everything on the line.
+    # A bare `# noqa` or `# halfbaked: ignore` suppresses everything on the line.
     if not listed:
         return True
     return finding.code.upper() in listed

@@ -1,18 +1,18 @@
-# vibelint
+# halfbaked
 
 **Find the mistakes AI leaves behind in your code.**
 
-Your ai assistant writes code that imports cleanly, reads well, and looks finished. Some of it does nothing. `vibelint` runs over a Python project like a test suite and reports every place the model invented an API, left a function unwritten, swallowed an error, or produced a test that cannot fail.
+Your ai assistant writes code that imports cleanly, reads well, and looks finished. Some of it does nothing. `halfbaked` runs over a Python project like a test suite and reports every place the model invented an API, left a function unwritten, swallowed an error, or produced a test that cannot fail.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/braindesmond5-boop/vibelint/main/demo.svg"
-       alt="vibelint finding 25 problems in an AI-written project" width="900">
+  <img src="https://raw.githubusercontent.com/braindesmond5-boop/halfbaked/main/demo.svg"
+       alt="halfbaked finding 25 problems in an AI-written project" width="900">
 </p>
 
 In full (not `--quiet`) it shows the offending line and what to do about it:
 
 ```console
-$ vibelint examples/vibe_coded_app
+$ halfbaked examples/vibe_coded_app
 
   app.py
       3  x  GHOST IMPORT      `fastjson` does not exist: not in the standard library, not
@@ -53,23 +53,23 @@ Nothing else catches these, because until recently nothing wrote them at scale:
 ## Install
 
 ```bash
-pip install vibelint
+pip install halfbaked
 ```
 
 Zero dependencies. Python 3.9+. Windows, macOS and Linux. It never runs, imports, or evaluates the code it analyses — everything is read from the syntax tree.
 
 <details>
-<summary>If <code>pip</code> or <code>vibelint</code> isn't found</summary>
+<summary>If <code>pip</code> or <code>halfbaked</code> isn't found</summary>
 
 **macOS / Linux** — the system Python has no `pip` command, only the module,
 and installed scripts land somewhere not on `PATH`:
 
 ```bash
-python3 -m pip install --user vibelint
-python3 -m vibelint .                     # always works
+python3 -m pip install --user halfbaked
+python3 -m halfbaked .                     # always works
 ```
 
-To type `vibelint` directly, add the script directory to your shell:
+To type `halfbaked` directly, add the script directory to your shell:
 
 ```bash
 echo 'export PATH="$HOME/Library/Python/3.9/bin:$PATH"' >> ~/.zshrc   # macOS
@@ -78,11 +78,11 @@ echo 'export PATH="$HOME/Library/Python/3.9/bin:$PATH"' >> ~/.zshrc   # macOS
 **Windows** — use the launcher if `pip` isn't on `PATH`:
 
 ```
-py -m pip install vibelint
-py -m vibelint .
+py -m pip install halfbaked
+py -m halfbaked .
 ```
 
-`python -m vibelint` is equivalent to the `vibelint` command everywhere, so it
+`python -m halfbaked` is equivalent to the `halfbaked` command everywhere, so it
 is the reliable form when `PATH` is uncooperative.
 
 </details>
@@ -90,20 +90,20 @@ is the reliable form when `PATH` is uncooperative.
 ## Use
 
 ```bash
-vibelint                   # check the current directory
-vibelint src/              # check one directory
-vibelint app.py            # check a single file
+halfbaked                   # check the current directory
+halfbaked src/              # check one directory
+halfbaked app.py            # check a single file
 
-vibelint --only VC040      # only test-theater findings
-vibelint --ignore VC030    # hide a rule you disagree with
-vibelint --json            # machine-readable, for CI
-vibelint --list            # describe every check
+halfbaked --only VC040      # only test-theater findings
+halfbaked --ignore VC030    # hide a rule you disagree with
+halfbaked --json            # machine-readable, for CI
+halfbaked --list            # describe every check
 ```
 
 Silence a single line:
 
 ```python
-result = risky()  # vibelint: ignore
+result = risky()  # halfbaked: ignore
 result = risky()  # noqa: VC030
 ```
 
@@ -133,7 +133,7 @@ Exit codes: `0` clean, `1` findings at or above `--fail-on` (default `warning`),
 
 A linter that cries wolf gets uninstalled. Every rule is calibrated against real, mature, human-written code rather than tuned only to catch things.
 
-Across **241 files of `pip` and `setuptools` source**, vibelint reports **2 critical findings**. Nearly all of the remaining output is `VC030` — real error-swallowing that is genuinely there.
+Across **241 files of `pip` and `setuptools` source**, halfbaked reports **2 critical findings**. Nearly all of the remaining output is `VC030` — real error-swallowing that is genuinely there.
 
 Getting to that number meant teaching the checks about how Python is actually written:
 
@@ -156,10 +156,10 @@ check costs almost nothing - the tree is already walked.
 ## In CI
 
 ```yaml
-- name: vibelint
+- name: halfbaked
   run: |
-    pip install vibelint
-    vibelint . --fail-on critical
+    pip install halfbaked
+    halfbaked . --fail-on critical
 ```
 
 ## How it works
@@ -181,10 +181,10 @@ The index is what makes ghost detection possible: no single file can tell you wh
 A new rule is one `Check` subclass and one line in the registry. The bar for merging: it must fire on generated code and stay silent on `pip` and `setuptools`.
 
 ```bash
-git clone <repo> && cd vibelint
+git clone <repo> && cd halfbaked
 pip install -e ".[dev]"
 python -m pytest tests/ -q
-vibelint examples/vibe_coded_app     # should report 25 flops
+halfbaked examples/vibe_coded_app     # should report 25 flops
 ```
 
 The README demo and the social card are both generated from the tool's real

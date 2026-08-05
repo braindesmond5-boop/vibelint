@@ -16,16 +16,16 @@ import operator
 import re
 from typing import Iterable, List, Optional, Set
 
-from vibelint.checks._ast_utils import (
+from halfbaked.checks._ast_utils import (
     annotate_parents,
     call_name,
     decorator_names,
     attribute_root,
     strip_docstring,
 )
-from vibelint.checks.base import Check
-from vibelint.context import FileContext
-from vibelint.finding import Finding, Severity
+from halfbaked.checks.base import Check
+from halfbaked.context import FileContext
+from halfbaked.finding import Finding, Severity
 
 #: Things that make a factory produce a mock rather than a real object.
 MOCK_FACTORIES = {"Mock", "MagicMock", "AsyncMock", "NonCallableMock", "patch", "create_autospec"}

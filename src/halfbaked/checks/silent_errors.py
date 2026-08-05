@@ -10,15 +10,15 @@ from __future__ import annotations
 import ast
 from typing import Iterable, Optional
 
-from vibelint.checks._ast_utils import (
+from halfbaked.checks._ast_utils import (
     annotate_parents,
     is_ellipsis,
     parent_of,
     strip_docstring,
 )
-from vibelint.checks.base import Check
-from vibelint.context import FileContext
-from vibelint.finding import Finding, Severity
+from halfbaked.checks.base import Check
+from halfbaked.context import FileContext
+from halfbaked.finding import Finding, Severity
 
 #: Exceptions that should almost never be swallowed, because doing so breaks
 #: Ctrl-C and hides interpreter-level failures.

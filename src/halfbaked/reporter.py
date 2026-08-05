@@ -13,8 +13,8 @@ import sys
 from pathlib import Path
 from typing import Dict, List, TextIO
 
-from vibelint.finding import Finding, Severity
-from vibelint.scanner import ScanResult
+from halfbaked.finding import Finding, Severity
+from halfbaked.scanner import ScanResult
 
 RESET = "\033[0m"
 BOLD = "\033[1m"

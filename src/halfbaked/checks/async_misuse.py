@@ -11,7 +11,7 @@ from __future__ import annotations
 import ast
 from typing import Iterable, Optional, Set
 
-from vibelint.checks._ast_utils import (
+from halfbaked.checks._ast_utils import (
     annotate_parents,
     call_name,
     dotted_path,
@@ -20,9 +20,9 @@ from vibelint.checks._ast_utils import (
     parent_of,
     walk_own_scope,
 )
-from vibelint.checks.base import Check
-from vibelint.context import FileContext
-from vibelint.finding import Finding, Severity
+from halfbaked.checks.base import Check
+from halfbaked.context import FileContext
+from halfbaked.finding import Finding, Severity
 
 #: Functions that legitimately accept a bare coroutine without awaiting it.
 COROUTINE_CONSUMERS = {

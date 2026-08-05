@@ -16,15 +16,15 @@ from __future__ import annotations
 import re
 from typing import Iterable, List
 
-from vibelint.checks._ast_utils import (
+from halfbaked.checks._ast_utils import (
     annotate_parents,
     enclosing_class,
     is_abstract,
     stub_kind,
 )
-from vibelint.checks.base import Check
-from vibelint.context import FileContext
-from vibelint.finding import Finding, Severity
+from halfbaked.checks.base import Check
+from halfbaked.context import FileContext
+from halfbaked.finding import Finding, Severity
 
 import ast
 
@@ -159,7 +159,7 @@ class ConfessionCheck(Check):
 
 def _claims_to_do_something(node) -> bool:
     """Whether an empty function presents itself as doing real work."""
-    from vibelint.checks._ast_utils import has_docstring
+    from halfbaked.checks._ast_utils import has_docstring
 
     if has_docstring(node):
         return True

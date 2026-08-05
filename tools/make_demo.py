@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Render vibelint's real output as an animated SVG for the README.
+"""Render halfbaked's real output as an animated SVG for the README.
 
     python3 tools/make_demo.py
 
-Re-runs vibelint, captures the coloured output, and writes demo.svg. The demo
+Re-runs halfbaked, captures the coloured output, and writes demo.svg. The demo
 is generated from real output, so it can never drift from what the tool
 actually prints - regenerate it and the README is correct again.
 
@@ -196,7 +196,7 @@ def build_svg(lines: List[str], command: str) -> str:
   <circle cx="20" cy="{TITLEBAR // 2}" r="6" fill="#ff5f57"/>
   <circle cx="39" cy="{TITLEBAR // 2}" r="6" fill="#febc2e"/>
   <circle cx="58" cy="{TITLEBAR // 2}" r="6" fill="#28c840"/>
-  <text x="{width / 2:.0f}" y="{TITLEBAR / 2 + 4:.0f}" fill="{THEME['dim']}" text-anchor="middle" font-size="12">vibelint</text>
+  <text x="{width / 2:.0f}" y="{TITLEBAR / 2 + 4:.0f}" fill="{THEME['dim']}" text-anchor="middle" font-size="12">halfbaked</text>
 
   <animate id="loop" attributeName="opacity" from="1" to="1" begin="0s;loop.end+0s" dur="{cycle:.2f}s"/>
 
@@ -223,7 +223,7 @@ def build_svg(lines: List[str], command: str) -> str:
 def main() -> int:
     env = dict(os.environ, FORCE_COLOR="1", PYTHONPATH=str(ROOT / "src"))
     completed = subprocess.run(
-        [sys.executable, "-m", "vibelint.cli", TARGET],
+        [sys.executable, "-m", "halfbaked.cli", TARGET],
         cwd=ROOT,
         env=env,
         capture_output=True,
@@ -232,11 +232,11 @@ def main() -> int:
 
     lines = [line for line in completed.stdout.split("\n") if line.strip()]
     if not lines:
-        print("vibelint produced no output; nothing to render", file=sys.stderr)
+        print("halfbaked produced no output; nothing to render", file=sys.stderr)
         print(completed.stderr, file=sys.stderr)
         return 1
 
-    OUTPUT.write_text(build_svg(lines, f"vibelint {TARGET}"), encoding="utf-8")
+    OUTPUT.write_text(build_svg(lines, f"halfbaked {TARGET}"), encoding="utf-8")
     size = OUTPUT.stat().st_size // 1024
     print(f"wrote {OUTPUT.relative_to(ROOT)}  ({size} KB, {len(lines)} lines of output)")
     return 0

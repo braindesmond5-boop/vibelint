@@ -17,16 +17,16 @@ import difflib
 from pathlib import Path
 from typing import Iterable, List, Optional, Set
 
-from vibelint.checks._ast_utils import annotate_parents, dotted_path, parent_of
-from vibelint.checks.base import Check
-from vibelint.context import FileContext
-from vibelint.environment import (
+from halfbaked.checks._ast_utils import annotate_parents, dotted_path, parent_of
+from halfbaked.checks.base import Check
+from halfbaked.context import FileContext
+from halfbaked.environment import (
     installed_top_level,
     known_import_names,
     module_is_importable,
     stdlib_modules,
 )
-from vibelint.finding import Finding, Severity
+from halfbaked.finding import Finding, Severity
 
 
 class GhostImportCheck(Check):
@@ -108,7 +108,7 @@ class GhostImportCheck(Check):
 
     def _check_relative(self, ctx: FileContext, node: ast.ImportFrom) -> Iterable[Finding]:
         """Relative imports pointing at modules the project does not have."""
-        from vibelint.indexer import dotted_name_for
+        from halfbaked.indexer import dotted_name_for
 
         current = dotted_name_for(ctx.path, ctx.root)
         parts = current.split(".") if current else []

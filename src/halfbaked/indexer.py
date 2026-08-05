@@ -12,7 +12,7 @@ import tokenize
 from pathlib import Path
 from typing import Dict, Iterable, Iterator, List, Optional, Set, Tuple
 
-from vibelint.context import ModuleInfo, ProjectIndex
+from halfbaked.context import ModuleInfo, ProjectIndex
 
 # Directories that are never the user's own source code.
 SKIP_DIRS = {

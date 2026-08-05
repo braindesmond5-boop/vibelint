@@ -11,18 +11,18 @@ import abc
 from pathlib import Path
 from typing import Iterable, Iterator, List, Optional
 
-from vibelint.context import FileContext
-from vibelint.finding import Finding, Severity
+from halfbaked.context import FileContext
+from halfbaked.finding import Finding, Severity
 
 
 class Check(abc.ABC):
-    """Base class for every vibelint rule."""
+    """Base class for every halfbaked rule."""
 
     #: Stable machine identifier, e.g. "VC010". Used for config and ignores.
     code: str = ""
     #: Short human tag shown in the report, e.g. "PLACEHOLDER".
     label: str = ""
-    #: One line explaining what this catches, shown by `vibelint --list`.
+    #: One line explaining what this catches, shown by `halfbaked --list`.
     description: str = ""
     #: Default severity; individual findings may override it.
     severity: Severity = Severity.WARNING
@@ -81,5 +81,5 @@ def run_checks(checks: List[Check], ctx: FileContext) -> Iterator[Finding]:
                     f"({type(exc).__name__}), so it was not fully checked"
                 ),
                 severity=Severity.NOTE,
-                suggestion="This is a bug in vibelint. Please report it with the file that triggered it.",
+                suggestion="This is a bug in halfbaked. Please report it with the file that triggered it.",
             )

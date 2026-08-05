@@ -32,12 +32,12 @@ def annotate_parents(tree: ast.AST) -> None:
     already in place - it used to be the single most expensive thing the tool
     did, because seven checks each re-walked every file.
     """
-    if getattr(tree, "_vibelint_parented", False):
+    if getattr(tree, "_halfbaked_parented", False):
         return
     for node in ast.walk(tree):
         for child in ast.iter_child_nodes(node):
             child.parent = node  # type: ignore[attr-defined]
-    tree._vibelint_parented = True  # type: ignore[attr-defined]
+    tree._halfbaked_parented = True  # type: ignore[attr-defined]
 
 
 def parent_of(node: ast.AST) -> Optional[ast.AST]:

@@ -2,7 +2,7 @@
 
 Checks never touch the filesystem themselves. They are handed a `FileContext`
 for the file under inspection, which also carries a `ProjectIndex` describing
-every other file in the project. That two-level view is what lets vibelint
+every other file in the project. That two-level view is what lets halfbaked
 catch calls to functions that were never actually written.
 """
 
@@ -127,7 +127,7 @@ class FileContext:
         self._all_nodes = nodes
         self.tree.parent = None  # type: ignore[attr-defined]
         # Tells annotate_parents() the work is already done.
-        self.tree._vibelint_parented = True  # type: ignore[attr-defined]
+        self.tree._halfbaked_parented = True  # type: ignore[attr-defined]
 
     @property
     def all_nodes(self) -> List[ast.AST]:
